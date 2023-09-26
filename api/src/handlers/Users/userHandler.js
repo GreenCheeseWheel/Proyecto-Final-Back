@@ -1,10 +1,12 @@
 require("dotenv").config();
 const { JWT_SECRET } = process.env;
 
+
 const newUser = require("../../controllers/Users/createuser");
 const deleteUser = require("../../controllers/Users/deleteUser");
 const editUser = require("../../controllers/Users/editUser");
 const loginUser = require("../../controllers/Users/loginUser");
+const loginUserGoogle = require("../../controllers/Users/loginUserGoogle");
 const {
   getUsers,
   getUserById,
@@ -12,6 +14,7 @@ const {
 } = require("../../controllers/Users/getUsers");
 
 const jwt = require("jsonwebtoken");
+
 
 //Generar el TOKEN
 function generateToken(user) {
@@ -36,7 +39,7 @@ const usersCreate = async (req, res) => {
   }
 };
 
-//Login del usuario
+//Login del usuario (Sin terceros)
 const userLogin = async (req, res) => {
   try
   {
@@ -45,6 +48,25 @@ const userLogin = async (req, res) => {
     const user = await loginUser(email, password);
     const token = generateToken(user);
 
+    res.status(200).json({message: `Usuario loggeado: ${user.name}`, token});
+  }
+  catch(error)
+  {
+    res.status(401).json({error: error.message});
+  }
+}
+
+//Login del usuario(Google)
+const userGoogleLogin = async (req, res) => {
+  try
+  {
+    const {google_token} = req.body;
+    
+    // El ticket permite obtener el mail del usuario para 
+    // chequear la base de datos
+    const user = await loginUserGoogle(google_token);
+    const token = generateToken(user);
+    
     res.status(200).json({message: `Usuario loggeado: ${user.name}`, token});
   }
   catch(error)
@@ -109,4 +131,4 @@ const userGetById = async (req, res) => {
   }
 };
 
-module.exports = { usersCreate, userLogin, userDelete, usersEdit, usersGet, userGetById };
+module.exports = { usersCreate, userLogin, userGoogleLogin, userDelete, usersEdit, usersGet, userGetById };
