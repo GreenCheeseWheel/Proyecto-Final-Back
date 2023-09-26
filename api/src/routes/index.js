@@ -2,6 +2,7 @@ const { Router } = require("express");
 const {
   usersGet,
   usersEdit,
+  userLogin,
   userGetById,
   usersCreate,
   userDelete,
@@ -26,6 +27,7 @@ router.get("/users", usersGet);
 router.put("/users/:id", usersEdit);
 router.get("/users/:id", userGetById);
 router.post("/users", usersCreate);
+router.post("/login", userLogin);
 router.delete("/users/:id", userDelete);
 
 ///////////////////////////////////////// Sales routes

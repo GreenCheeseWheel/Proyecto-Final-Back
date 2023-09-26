@@ -4,6 +4,7 @@ const { JWT_SECRET } = process.env;
 const newUser = require("../../controllers/Users/createuser");
 const deleteUser = require("../../controllers/Users/deleteUser");
 const editUser = require("../../controllers/Users/editUser");
+const loginUser = require("../../controllers/Users/loginUser");
 const {
   getUsers,
   getUserById,
@@ -34,6 +35,23 @@ const usersCreate = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
+//Login del usuario
+const userLogin = async (req, res) => {
+  try
+  {
+    const {email, password} = req.body;
+
+    const user = await loginUser(email, password);
+    const token = generateToken(user);
+
+    res.status(200).json({message: `Usuario loggeado: ${user.name}`, token});
+  }
+  catch(error)
+  {
+    res.status(401).json({error: error.message});
+  }
+}
 
 //Borrar el usuario
 const userDelete = async (req, res) => {
@@ -91,4 +109,4 @@ const userGetById = async (req, res) => {
   }
 };
 
-module.exports = { usersCreate, userDelete, usersEdit, usersGet, userGetById };
+module.exports = { usersCreate, userLogin, userDelete, usersEdit, usersGet, userGetById };
