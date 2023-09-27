@@ -12,13 +12,13 @@ const loginUserGoogle = async (token) => {
       );
   
     const {name, email} = ticket.getPayload();
-
+    
     const user = await prisma.user.update({
         where: {
             email,
         },
         data: {
-            name
+            name,
         }
     });
 

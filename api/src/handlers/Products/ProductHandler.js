@@ -47,16 +47,17 @@ const editAProduct = async (req, res) => {
   }
 };
 
-//Obtener todos los productos:
+
+//Obtener producto por nombre:
 
 const getAProduct = async (req, res) => {
   try {
-    const { name } = req.query;
+    const { name, brand } = req.query;
     if (!name) {
-      const product = await getProduct();
+      const product = await getProduct(brand);
       res.status(200).json(product);
     } else {
-      const product = await getProductByName(name);
+      const product = await getProductByName(name, brand);
       res.status(200).json(product);
     }
   } catch (error) {
@@ -69,9 +70,9 @@ const getAProduct = async (req, res) => {
 //Obtener una producto por su Id:
 
 const getProductId = async (req, res) => {
-  const { id } = req.params;
+  const { id, brand } = req.params;
   try {
-    const product = await getProductById(+id);
+    const product = await getProductById(+id, brand);
     if (product) {
       res.status(200).json(product);
     } else {
