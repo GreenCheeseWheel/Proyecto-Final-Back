@@ -51,12 +51,12 @@ const editAProduct = async (req, res) => {
 
 const getAProduct = async (req, res) => {
   try {
-    const { name } = req.query;
+    const { name, brand, price } = req.query;
     if (!name) {
-      const product = await getProduct();
+      const product = await getProduct(brand, price);
       res.status(200).json(product);
     } else {
-      const product = await getProductByName(name);
+      const product = await getProductByName(name, brand, price);
       res.status(200).json(product);
     }
   } catch (error) {
