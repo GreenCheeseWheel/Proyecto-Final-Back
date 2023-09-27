@@ -37,7 +37,7 @@ const getProductById = async (id) => {
 
 //Busca un producto por su nombre:
 
-const getProductByName = async (name, brand, maxPrice, categoryName) => {
+const getProductByName = async (name, brand, maxPrice= Number.MAX_VALUE, categoryName) => {
 
   let product =  prisma.product.findMany({
     where: {
@@ -46,7 +46,7 @@ const getProductByName = async (name, brand, maxPrice, categoryName) => {
       },
       brand,
       price: {
-        lte: maxPrice,
+        lte: parseFloat(maxPrice),
       },
       categoryrel: {
         name: categoryName
