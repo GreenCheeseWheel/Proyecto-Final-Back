@@ -9,8 +9,8 @@ const getProduct = async (brand, maxPrice = Number.MAX_VALUE, categoryName) => {
       price: {
         lte: parseFloat(maxPrice),
       },
-      categoryrel: {
-        name: categoryName
+      category: {
+        contains: categoryName,
       }
     }
   });
@@ -44,9 +44,9 @@ const getProductByName = async (name, brand, maxPrice= Number.MAX_VALUE, categor
       brand,
       price: {
         lte: parseFloat(maxPrice),
-      },
-      categoryrel: {
-        name: categoryName
+      }, 
+      category: {
+        contains: categoryName,
       }
     },
   });
