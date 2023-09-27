@@ -4,16 +4,16 @@ const filterByBrand = require("./filters/filterByBrand");
 const filterByPrice = require("./filters/filterByPrice");
 //Busca todos los productos.
 
-const getProduct = async (brand, price, categoryName) => {
+const getProduct = async (brand, maxPrice = Number.MAX_VALUE, categoryName) => {
   
   let product = await prisma.product.findMany({
     where: {
       brand,
       price: {
-        lte: parseFloat(price),
+        lte: parseFloat(maxPrice),
       },
       categoryrel: {
-        name: categoryName,
+        name: categoryName
       }
     }
   });
@@ -37,13 +37,20 @@ const getProductById = async (id) => {
 
 //Busca un producto por su nombre:
 
-const getProductByName = async (name, brand, price) => {
+const getProductByName = async (name, brand, maxPrice, categoryName) => {
 
   let product =  prisma.product.findMany({
     where: {
       name: {
         contains: name,
       },
+      brand,
+      price: {
+        lte: maxPrice,
+      },
+      categoryrel: {
+        name: categoryName
+      }
     },
   });
   

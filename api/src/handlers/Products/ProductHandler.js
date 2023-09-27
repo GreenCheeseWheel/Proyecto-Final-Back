@@ -13,7 +13,7 @@ const createNewProduct = async (req, res) => {
   const { name, image, brand, category, price } = req.body;
 
   try {
-    const product = await createProduct(name, image, brand, category, price);
+    const product = await createProduct(name, image, brand, parseInt(category), parseFloat(price));
     res.status(201).send(`Nuevo producto creado: ${product.name}`);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -51,9 +51,9 @@ const editAProduct = async (req, res) => {
 
 const getAProduct = async (req, res) => {
   try {
-    const { name, brand, price } = req.query;
+    const { name, brand, price, category } = req.query;
     if (!name) {
-      const product = await getProduct(brand, price);
+      const product = await getProduct(brand, price, category);
       res.status(200).json(product);
     } else {
       const product = await getProductByName(name, brand, price);
