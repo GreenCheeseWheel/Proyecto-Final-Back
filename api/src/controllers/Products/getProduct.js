@@ -1,7 +1,4 @@
-const { default: axios } = require("axios");
 const prisma = require("../../db");
-const filterByBrand = require("./filters/filterByBrand");
-const filterByPrice = require("./filters/filterByPrice");
 //Busca todos los productos.
 
 const getProduct = async (brand, maxPrice = Number.MAX_VALUE, categoryName) => {
@@ -54,10 +51,7 @@ const getProductByName = async (name, brand, maxPrice= Number.MAX_VALUE, categor
     },
   });
   
-  product = filterByBrand(product, brand);
-  product = filterByPrice(product, price);
 
-  console.log("Producto es: " + product);
   return product;
 };
 
