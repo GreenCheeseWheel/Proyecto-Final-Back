@@ -14,6 +14,8 @@ const newUser = async (name, email, celular, password) => {
     },
   });
 
+  
+
   return user;
 };
 
