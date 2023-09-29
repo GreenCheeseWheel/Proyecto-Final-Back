@@ -75,5 +75,5 @@ router.get("/product/:id", getProductId);
 router.get("/category", getCategory);
 router.post("/category", categoryCreate);
 /////////////////////////////////////////
-
+console.log("EL router está: " + router);
 module.exports = router;

@@ -39,9 +39,8 @@ const usersCreate = async (req, res) => {
   
     await sendWelcome(email, "./src/templates/Bienvenido.html");
 
-    res.status(201).json({ message: `Usuario creado: ${user.name}`, token });
+    res.status(201).json({ message: `Usuario creado: ${user.name}`, rol: user.rol, token });
 
-    
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -58,7 +57,7 @@ const userLogin = async (req, res) => {
 
     await sendLoginNotif(email, "./src/templates/Login.html");
 
-    res.status(200).json({message: `Usuario loggeado: ${user.name}`, token});
+    res.status(200).json({message: `Usuario loggeado: ${user.name}`,rol: user.rol, token});
   }
   catch(error)
   {
