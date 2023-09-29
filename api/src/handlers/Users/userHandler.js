@@ -1,6 +1,12 @@
 require("dotenv").config();
 const { JWT_SECRET } = process.env;
 
+// Mailing dependencies
+const sendWelcome = require("../../controllers/Mails/sendWelcome");
+const sendLoginNotif = require("../../controllers/Mails/sendLoginNotif");
+
+
+// User handler dependencies
 const newUser = require("../../controllers/Users/createuser");
 const deleteUser = require("../../controllers/Users/deleteUser");
 const editUser = require("../../controllers/Users/editUser");
@@ -12,6 +18,7 @@ const {
 } = require("../../controllers/Users/getUsers");
 
 const jwt = require("jsonwebtoken");
+
 
 //Generar el TOKEN
 function generateToken(user) {
@@ -29,8 +36,12 @@ const usersCreate = async (req, res) => {
 
     // Generar un token JWT para el usuario
     const token = generateToken(user);
+  
+    await sendWelcome(email, "./src/templates/Bienvenido.html");
 
     res.status(201).json({ message: `Usuario creado: ${user.name}`, token });
+
+    
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -44,6 +55,8 @@ const userLogin = async (req, res) => {
 
     const user = await loginUser(email, password);
     const token = generateToken(user);
+
+    await sendLoginNotif(email, "./src/templates/Login.html");
 
     res.status(200).json({message: `Usuario loggeado: ${user.name}`, token});
   }
