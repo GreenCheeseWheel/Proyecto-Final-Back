@@ -33,7 +33,7 @@ const usersCreate = async (req, res) => {
     // Generar un token JWT para el usuario
     const token = generateToken(user);
 
-    res.status(201).json({ message: `Usuario creado: ${user.name}`, token });
+    res.status(201).json({ message: `Usuario creado: ${user.name}`, rol: user.rol, token });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -48,7 +48,7 @@ const userLogin = async (req, res) => {
     const user = await loginUser(email, password);
     const token = generateToken(user);
 
-    res.status(200).json({message: `Usuario loggeado: ${user.name}`, token});
+    res.status(200).json({message: `Usuario loggeado: ${user.name}`, rol: user.rol, token});
   }
   catch(error)
   {

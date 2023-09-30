@@ -9,7 +9,7 @@ const loginUserGoogle = async (token) => {
           idToken: token,
           audience: CLIENT_ID
         }
-      );
+    );
   
     const {name, email} = ticket.getPayload();
     
