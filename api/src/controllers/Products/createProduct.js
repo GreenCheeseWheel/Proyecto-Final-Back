@@ -1,13 +1,14 @@
 const prisma = require("../../db");
 
-const createProduct = async (name, image, brand, category, price) => {
+const createProduct = async (name, image, brand, description, category, price) => {
   const product = await prisma.product.create({
     data: {
       name,
       image,
       brand,
+      description,
       category,
-      price,
+      price: parseFloat(price),
     },
   });
   return product;

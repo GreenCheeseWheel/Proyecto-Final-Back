@@ -27,6 +27,7 @@ model Product {
   image String
   brand String
   category String
+  description String
   price Decimal
   active Boolean @default(true)
   categoryrel Category @relation(fields: [category], references: [name])
