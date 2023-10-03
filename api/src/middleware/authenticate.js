@@ -12,7 +12,7 @@ function authenticate(req, res, next)
         // enter the login or register page
         if(nonSecure.includes(req.path)) 
         {
-            next();
+            return next();
         }
 
         const token = req.headers.authorization?.split(" ")[1];

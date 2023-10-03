@@ -1,15 +1,31 @@
 const prisma = require("../db");
 const {ADMIN_PAGES} = require("../utils/utils")
+const noAuthorization = require("./no_authorization");
 
 
 async function authorization(req, res, next)
 {
     try
     {
-        const token = req.headers.authorization?.split(" ")[1];
 
+        if(noAuthorization.includes(req.path))
+        {
+            console.log("NO SE DEBE AUTORIZAR")
+            return next();
+        }
+
+        const token = req.headers.authorization?.split(" ")[1];
+        
         // This obtains token payload
-        const payload = token.split(".")[1] 
+        let payload = token.split(".")
+
+        if(payload.length <= 1)
+        {
+            res.status(401).json({error: "Token malformed"});
+        }
+        
+        payload = payload[1];
+
         const email = JSON.parse(Buffer.from(payload, "base64").toString()).email;
 
         const user = await prisma.user.findFirst({
