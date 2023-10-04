@@ -15,7 +15,7 @@ const createNewProduct = async (req, res) => {
   const { name, image, brand, category, price, stock } = req.body;
 
   try {
-    const product = await createProduct(name, image, brand, category, price, stock);
+    const product = await createProduct(name, image, brand, category, +price, +stock);
     res.status(201).json(product);
   } catch (error) {
     res.status(400).json({ error: error.message });
@@ -45,11 +45,11 @@ const editAProduct = async (req, res) => {
   try {
     if(!add)
     {
-      const product = await editProduct(+id, name, image, brand, category, price, stock);
+      const product = await editProduct(+id, name, image, brand, category, +price, +stock);
       return res.status(201).json(product);
     }
     
-    const product = await addStock(id, stock);
+    const product = await addStock(+id, +stock);
     return res.status(201).json(product);
     
   } catch (error) {
