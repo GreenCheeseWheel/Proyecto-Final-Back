@@ -12,7 +12,11 @@ const newUser = async (name, email, celular, password) => {
       celular,
       password: hashedPassword,
     },
+  
   });
+
+  
+
 
   return user;
 };

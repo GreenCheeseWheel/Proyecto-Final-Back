@@ -1,12 +1,10 @@
 const prisma = require("../../db");
-const filterByBrand = require("./filters/filterByBrand");
+
 //Busca todos los productos.
 
 const getProduct = async (brand) => {
   let product = await prisma.product.findMany();
-  
-  product = filterByBrand(product, brand);
-
+ 
   return product.length === 0
     ? "No hay ninguna coincidencia en la base de datos"
     : product;
