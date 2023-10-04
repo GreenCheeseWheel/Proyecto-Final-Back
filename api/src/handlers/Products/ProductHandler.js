@@ -1,6 +1,7 @@
 const createProduct = require("../../controllers/Products/createProduct");
 const deleteProduct = require("../../controllers/Products/deleteProduct");
 const editProduct = require("../../controllers/Products/editProduct");
+const addStock = require("../../controllers/Products/addStock");
 const {
   getProduct,
   getProductById,
@@ -38,12 +39,23 @@ const deleteAProduct = async (req, res) => {
 
 const editAProduct = async (req, res) => {
   const { id } = req.params;
+  const { add } = req.query;
   const { name, image, brand, category, price, stock } = req.body;
 
   try {
-    const product = await editProduct(+id, name, image, brand, category, price, stock);
+    if(!add)
+    {
+      const product = await editProduct(+id, name, image, brand, category, price, stock);
+      return res.status(201).json(product);
+    }
+
+
+    const product = await addStock(+id, stock);
     res.status(201).json(product);
-  } catch (error) {
+
+  } 
+  catch (error) 
+  {
     res.status(400).json({ error: error.message });
   }
 };
