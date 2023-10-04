@@ -8,6 +8,14 @@ const {
   getProductByName,
 } = require("../../controllers/Products/getProduct");
 
+//
+// EN ESTE ARCHIVO CAMBIO MÁS QUE NADA QUE EL PRODUCTO SE DEVUELVA 
+// EN SU TOTALIDAD POR LA RESPONSE 
+//
+//---- LA FUNCIÓN editAProduct LA CAMBIO PARA PODER AGREGAR STOCK
+//---- LA FUNCIÓN createNewProduct LA CAMBIO PARA CREAR CON STOCK 
+
+
 //Creacion de un nuevo producto:
 
 const createNewProduct = async (req, res) => {
