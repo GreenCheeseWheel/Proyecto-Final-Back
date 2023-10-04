@@ -16,7 +16,7 @@ model User {
   celular String
   name String
   password String
-  rol String @default("USER")
+  rol Role @default(USER)
   active Boolean @default(true)
   sales Sale[]
 }
@@ -28,6 +28,7 @@ model Product {
   brand String
   category Int
   price Decimal
+  stock Int
   active Boolean @default(true)
   categoryrel Category @relation(fields: [category], references: [id])
   details Detail[]
@@ -57,4 +58,10 @@ model Sale {
   iduser Int
   details Detail[]
   user User @relation(fields: [iduser], references: [id])
+}
+
+enum Role {
+  USER
+  ADMIN
+  SUPERADMIN
 }

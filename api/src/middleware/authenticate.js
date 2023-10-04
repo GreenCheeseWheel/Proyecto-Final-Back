@@ -10,7 +10,7 @@ function authenticate(req, res, next)
         // If current path does not need authentication we keep going
         // This makes it so user doesn't need to be logged in to
         // enter the login or register page
-        if(nonSecure.includes(req.path)) 
+        if(nonSecure[req.path]) 
         {
             return next();
         }

@@ -1,20 +1,22 @@
 const createProduct = require("../../controllers/Products/createProduct");
 const deleteProduct = require("../../controllers/Products/deleteProduct");
 const editProduct = require("../../controllers/Products/editProduct");
+const addStock = require("../../controllers/Products/addStock");
 const {
   getProduct,
   getProductById,
   getProductByName,
 } = require("../../controllers/Products/getProduct");
 
+
 //Creacion de un nuevo producto:
 
 const createNewProduct = async (req, res) => {
-  const { name, image, brand, category, price } = req.body;
+  const { name, image, brand, category, price, stock } = req.body;
 
   try {
-    const product = await createProduct(name, image, brand, category, price);
-    res.status(201).send(`Nuevo producto creado: ${product.name}`);
+    const product = await createProduct(name, image, brand, category, price, stock);
+    res.status(201).json(product);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -27,7 +29,7 @@ const deleteAProduct = async (req, res) => {
 
   try {
     const product = await deleteProduct(+id);
-    res.status(201).send(`El producto: ${product.name} ha sido eliminado`);
+    res.status(201).json(product);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -37,15 +39,24 @@ const deleteAProduct = async (req, res) => {
 
 const editAProduct = async (req, res) => {
   const { id } = req.params;
-  const { name, image, brand, category, price } = req.body;
+  const { add } = req.query;
+  const { name, image, brand, category, price, stock } = req.body;
 
   try {
-    const product = await editProduct(+id, name, image, brand, category, price);
-    res.status(201).send(`Producto editado: ${product.name}`);
+    if(!add)
+    {
+      const product = await editProduct(+id, name, image, brand, category, price, stock);
+      return res.status(201).json(product);
+    }
+    
+    const product = await addStock(id, stock);
+    return res.status(201).json(product);
+    
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
+
 
 
 //Obtener producto por nombre:

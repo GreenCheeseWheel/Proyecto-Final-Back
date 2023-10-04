@@ -33,7 +33,7 @@ const usersCreate = async (req, res) => {
     // Generar un token JWT para el usuario
     const token = generateToken(user);
 
-    res.status(201).json({ message: `Usuario creado: ${user.name}`, rol: user.rol, token });
+    res.status(201).json({id: user.id, email: user.email, name: user.name, rol: user.rol, celular: user.celular,  token });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -48,7 +48,7 @@ const userLogin = async (req, res) => {
     const user = await loginUser(email, password);
     const token = generateToken(user);
 
-    res.status(200).json({message: `Usuario loggeado: ${user.name}`, rol: user.rol, token});
+    res.status(200).json({id: user.id, email: user.email, name: user.name, rol: user.rol, celular: user.celular, token });
   }
   catch(error)
   {
@@ -61,16 +61,17 @@ const userGoogleLogin = async (req, res) => {
   try
   {
     const {google_token} = req.body;
-    
     // El ticket permite obtener el mail del usuario para 
     // chequear la base de datos
+
     const user = await loginUserGoogle(google_token);
     const token = generateToken(user);
     
-    res.status(200).json({message: `Usuario loggeado: ${user.name}`, token});
+    res.status(200).json({id: user.id, email: user.email, name: user.name, rol: user.rol, celular: user.celular,  token });
   }
   catch(error)
   {
+    
     res.status(401).json({error: error.message});
   }
 }
@@ -80,7 +81,7 @@ const userDelete = async (req, res) => {
   const { id } = req.params;
   try {
     const user = await deleteUser(+id);
-    res.status(201).send(`Usuario eliminado: ${user.name}`);
+    res.status(201).json({id: user.id, email: user.email, name: user.name, rol: user.rol, celular: user.celular});
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -92,7 +93,7 @@ const usersEdit = async (req, res) => {
   const { name, email, celular, password } = req.body;
   try {
     const user = await editUser(+id, name, email, celular, password);
-    res.status(201).json(`Usuario editado con exito ${user.name}`);
+    res.status(201).json({id: user.id, email: user.email, name: user.name, rol: user.rol, celular: user.celular});
   } catch (error) {
     res.status(400).json({ error: error.message });
   }

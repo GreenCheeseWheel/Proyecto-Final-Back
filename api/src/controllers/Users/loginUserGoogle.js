@@ -4,15 +4,18 @@ const client = new OAuth2Client(CLIENT_ID);
 const prisma = require("../../db");
 
 const loginUserGoogle = async (token) => {
+    
     const ticket = await client.verifyIdToken(
         {
           idToken: token,
           audience: CLIENT_ID
         }
     );
-  
+    
+
     const {name, email} = ticket.getPayload();
     
+
     const user = await prisma.user.update({
         where: {
             email,
@@ -21,7 +24,7 @@ const loginUserGoogle = async (token) => {
             name,
         }
     });
-
+    
     if(!user) throw Error("Such email is not registered...");
 
     return user;

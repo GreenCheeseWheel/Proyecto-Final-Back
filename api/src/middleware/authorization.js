@@ -1,6 +1,6 @@
 const prisma = require("../db");
 const {ADMIN_PAGES} = require("../utils/utils")
-const noAuthorization = require("./no_authorization");
+const {rutasObj, rutasRegex} = require("./no_authorization");
 
 
 async function authorization(req, res, next)
@@ -8,9 +8,8 @@ async function authorization(req, res, next)
     try
     {
 
-        if(noAuthorization.includes(req.path))
+        if(rutasObj[req.path] || rutasRegex.some(regex => regex.test(req.path)))
         {
-            console.log("NO SE DEBE AUTORIZAR")
             return next();
         }
 

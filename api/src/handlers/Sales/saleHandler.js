@@ -5,9 +5,9 @@ const getSaleByIdController = require("../../controllers/Sales/getSaleById");
 
 const createSale = (req, res) => {
     
-    const {email, idproduct, quantity} = req.body; 
+    const {iduser, idproduct, quantity} = req.body; 
     
-    createSaleController(email, idproduct, quantity)
+    createSaleController(+iduser, +idproduct, +quantity)
         .then(sale => {
             res.status(200).json({...sale});
         })
