@@ -1,13 +1,13 @@
 const prisma = require("../../db");
 //Busca todos los productos.
 
-const getProduct = async (brand, maxPrice = Number.MAX_VALUE, categoryName, sort) => {
+const getProduct = async (brand, maxPrice, categoryName, sort) => {
 
   let product = await prisma.product.findMany({
     where: {
       brand,
       price: {
-        lte: parseFloat(maxPrice),
+        lte: isNaN(maxPrice) ? undefined : maxPrice,
       },
       category: {
         contains: categoryName,

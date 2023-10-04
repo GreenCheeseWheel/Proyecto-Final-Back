@@ -74,14 +74,17 @@ const getAProduct = async (req, res) => {
   try {
     // Debo parsear el price porque viene de la url como query
     const { name, brand, price, category, sort } = req.query;
+    
     if (!name) {
       const product = await getProduct(brand, +price, category, sort);
+      
       res.status(200).json(product);
     } else {
       const product = await getProductByName(name, brand, +price, sort);
       res.status(200).json(product);
     }
   } catch (error) {
+    console.log(error);
     res
       .status(500)
       .json({ error: "No se logró encontrar el producto solicitado" });
