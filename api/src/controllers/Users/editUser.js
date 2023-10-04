@@ -16,3 +16,5 @@ const editUser = async (id, name, email, password, celular) => {
 };
 
 module.exports = editUser;
+
+
