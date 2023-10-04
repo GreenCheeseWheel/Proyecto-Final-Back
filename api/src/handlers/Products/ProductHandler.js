@@ -10,11 +10,12 @@ const {
 //Creacion de un nuevo producto:
 
 const createNewProduct = async (req, res) => {
-  const { name, image, brand, description, category, price } = req.body;
+  const { name, image, brand, description, category, price, stock } = req.body;
 
+  // Aca no parseo porque vienen del body como deben ser (SUPUESTAMENTE)
   try {
-    const product = await createProduct(name, image, brand, description, category, parseFloat(price));
-    res.status(201).send(`Nuevo producto creado: ${product.name}`);
+    const product = await createProduct(name, image, brand, description, category, price, stock);
+    res.status(201).json(product);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -27,7 +28,7 @@ const deleteAProduct = async (req, res) => {
 
   try {
     const product = await deleteProduct(+id);
-    res.status(201).send(`El producto: ${product.name} ha sido eliminado`);
+    res.status(201).json(product);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -37,11 +38,11 @@ const deleteAProduct = async (req, res) => {
 
 const editAProduct = async (req, res) => {
   const { id } = req.params;
-  const { name, image, brand, category, price } = req.body;
+  const { name, image, brand, category, price, stock } = req.body;
 
   try {
-    const product = await editProduct(+id, name, image, brand, category, price);
-    res.status(201).send(`Producto editado: ${product.name}`);
+    const product = await editProduct(+id, name, image, brand, category, price, stock);
+    res.status(201).json(product);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -51,12 +52,13 @@ const editAProduct = async (req, res) => {
 
 const getAProduct = async (req, res) => {
   try {
+    // Debo parsear el price porque viene de la url como query
     const { name, brand, price, category, sort } = req.query;
     if (!name) {
-      const product = await getProduct(brand, price, category, sort);
+      const product = await getProduct(brand, +price, category, sort);
       res.status(200).json(product);
     } else {
-      const product = await getProductByName(name, brand, price, sort);
+      const product = await getProductByName(name, brand, +price, sort);
       res.status(200).json(product);
     }
   } catch (error) {

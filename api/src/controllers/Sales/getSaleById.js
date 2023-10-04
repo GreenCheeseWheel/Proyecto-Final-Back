@@ -4,7 +4,7 @@ async function getSaleById(id)
 {
     const sale = await prisma.sale.findFirstOrThrow({
         where: {
-            id: parseInt(id)
+            id        
         }
     });
 

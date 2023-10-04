@@ -13,6 +13,13 @@ const {
 
 const jwt = require("jsonwebtoken");
 
+////////////////////
+// EN ESTE ARCHIVO SOLO HAGO 
+// QUE LAS RUTAS DEVUELVAN EL 
+// USUARIO CASI COMPLETO EN LA RESPONSE
+////////////////////
+
+
 //Generar el TOKEN
 function generateToken(user) {
   const token = jwt.sign({ id: user.id, email: user.email }, JWT_SECRET, {
@@ -30,7 +37,7 @@ const usersCreate = async (req, res) => {
     // Generar un token JWT para el usuario
     const token = generateToken(user);
 
-    res.status(201).json({ message: `Usuario creado: ${user.name}`, token });
+    res.status(201).json({id: user.id, email: user.email, name: user.name, rol: user.rol, celular: user.celular,  token });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -45,7 +52,7 @@ const userLogin = async (req, res) => {
     const user = await loginUser(email, password);
     const token = generateToken(user);
 
-    res.status(200).json({message: `Usuario loggeado: ${user.name}`, token});
+    res.status(201).json({id: user.id, email: user.email, name: user.name, rol: user.rol, celular: user.celular,  token });
   }
   catch(error)
   {
@@ -58,7 +65,7 @@ const userDelete = async (req, res) => {
   const { id } = req.params;
   try {
     const user = await deleteUser(+id);
-    res.status(201).send(`Usuario eliminado: ${user.name}`);
+    res.status(201).json({id: user.id, email: user.email, name: user.name, rol: user.rol, celular: user.celular });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -70,13 +77,17 @@ const usersEdit = async (req, res) => {
   const { name, email, celular, password } = req.body;
   try {
     const user = await editUser(+id, name, email, celular, password);
-    res.status(201).json(`Usuario editado con exito ${user.name}`);
+    res.status(201).json({id: user.id, email: user.email, name: user.name, rol: user.rol, celular: user.celular});
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 };
 
 //Obtener todos los usuarios
+
+// ATENCION:
+// ESTA RUTA DEVUELVE LOS USUARIOS CON TODA SU INFO
+// ESTARIA BUENO QUE ESTA SEA UNA RUTA PROTEGIDA
 const usersGet = async (req, res) => {
   try {
     const { name } = req.query;
@@ -100,7 +111,7 @@ const userGetById = async (req, res) => {
   try {
     const user = await getUserById(+id);
     if (user) {
-      res.status(200).json(user);
+      res.status(200).json({id: user.id, email: user.email, name: user.name, rol: user.rol, celular: user.celular});
     } else {
       res.status(404).json({ error: "Usuario no encontrado" });
     }

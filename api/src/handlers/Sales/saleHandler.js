@@ -3,11 +3,17 @@ const createSaleController = require("../../controllers/Sales/createSale");
 const getAllSalesController = require("../../controllers/Sales/getAllSales");
 const getSaleByIdController = require("../../controllers/Sales/getSaleById");
 
+
+///////////////////////////
+// EN ESTE ARCHIVO SOLO MODIFICO createSale
+// AHORA RECIBO iduser EN VEZ DE email POR BODY
+///////////////////////////
+
 const createSale = (req, res) => {
     
-    const {email, idproduct, quantity} = req.body; 
+    const {iduser, idproduct, quantity} = req.body; 
     
-    createSaleController(email, idproduct, quantity)
+    createSaleController(iduser, idproduct, quantity)
         .then(sale => {
             res.status(200).json({...sale});
         })
