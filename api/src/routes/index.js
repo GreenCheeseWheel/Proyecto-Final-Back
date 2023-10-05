@@ -30,7 +30,7 @@ router.put("/users/:id", usersEdit);
 router.get("/users/:id", userGetById);
 router.post("/users", usersCreate);
 router.post("/login", userLogin);
-router.post("/login-google-init", userGoogleLogin)
+router.get("/login-google-init", userGoogleLogin)
 router.post("/login-google", userGoogleLoginCredentials);
 router.delete("/users/:id", userDelete);
 
