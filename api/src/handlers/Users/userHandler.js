@@ -14,6 +14,7 @@ const {
 } = require("../../controllers/Users/getUsers");
 
 const jwt = require("jsonwebtoken");
+const loginUserGoogleCred = require("../../controllers/Users/loginUserGoogleCred");
 
 
 //Generar el TOKEN
@@ -60,20 +61,32 @@ const userLogin = async (req, res) => {
 const userGoogleLogin = async (req, res) => {
   try
   {
-    const {google_token} = req.body;
-    // El ticket permite obtener el mail del usuario para 
-    // chequear la base de datos
-
-    const user = await loginUserGoogle(google_token);
-    const token = generateToken(user);
+    const auth_url = await loginUserGoogle();
     
-    res.status(200).json({id: user.id, email: user.email, name: user.name, rol: user.rol, celular: user.celular,  token });
+    res.status(200).json({auth_url});
   }
   catch(error)
   {
     
     res.status(401).json({error: error.message});
   }
+}
+
+const userGoogleLoginCredentials = async (req, res) => {
+  const { google_code } = req.body;
+  
+  try
+  {
+    const user = await loginUserGoogleCred(google_code)
+    const token = generateToken(user);
+    res.status(200).json({id: user.id, email: user.email, name: user.name, rol: user.rol, celular: user.celular, token });
+  }
+  catch(error) 
+  {
+    res.status(401).json({error: error.message});
+  }
+  
+
 }
 
 //Borrar el usuario
@@ -132,4 +145,13 @@ const userGetById = async (req, res) => {
   }
 };
 
-module.exports = { usersCreate, userLogin, userGoogleLogin, userDelete, usersEdit, usersGet, userGetById };
+module.exports = { 
+  usersCreate, 
+  userLogin, 
+  userGoogleLogin, 
+  userGoogleLoginCredentials,
+  userDelete, 
+  usersEdit, 
+  usersGet, 
+  userGetById 
+};

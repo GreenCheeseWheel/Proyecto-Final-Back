@@ -35,6 +35,7 @@ const getProductByName = async (name, brand) => {
     },
   });
 
+  
   product = filterByBrand(brand);
 
   return product;
