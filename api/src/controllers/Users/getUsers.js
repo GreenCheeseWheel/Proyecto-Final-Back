@@ -19,6 +19,9 @@ const getUserById = async (id) => {
     where: {
       id,
     },
+    include: {
+      sales
+    }
   });
   return user;
 };

@@ -15,6 +15,7 @@ model User {
   email String @unique
   celular String
   name String
+  address String?
   password String
   rol Role @default(USER)
   active Boolean @default(true)
