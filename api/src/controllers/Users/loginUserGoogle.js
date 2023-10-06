@@ -1,8 +1,3 @@
-const {CLIENT_ID, CLIENT_SECRET, OAUTH_REDIRECT} = process.env;
-const { OAuth2Client } = require("google-auth-library");
-
-const prisma = require("../../db");
-const axios = require("axios");
 const {oauth2Client} = require("./utils/oauth_client")
 
 //
@@ -12,7 +7,6 @@ const {oauth2Client} = require("./utils/oauth_client")
 // Así podemos actualizar su info en la base de datos
 
 const loginUserGoogle = async (token) => {
-    console.log("REDIRECT: " + OAUTH_REDIRECT);
     
   
     const scopes = [
@@ -27,7 +21,7 @@ const loginUserGoogle = async (token) => {
         scope: scopes,
     });
     
-    console.log(url);
+
     return url;
     
 }
