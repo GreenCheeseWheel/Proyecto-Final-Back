@@ -80,7 +80,7 @@ const getAProduct = async (req, res) => {
       
       res.status(200).json(product);
     } else {
-      const product = await getProductByName(name, brand, +price, sort);
+      const product = await getProductByName(name, brand, +price, category, sort);
       res.status(200).json(product);
     }
   } catch (error) {
