@@ -27,11 +27,11 @@ model Product {
   name String
   image String
   brand String
-  category Int
+  category String
   price Decimal
   stock Int
   active Boolean @default(true)
-  categoryrel Category @relation(fields: [category], references: [id])
+  categoryrel Category @relation(fields: [category], references: [name])
   details Detail[]
 }
 
@@ -49,7 +49,7 @@ model Detail {
 
 model Category {
   id Int @id @default(autoincrement())
-  name String
+  name String @unique
   active Boolean
   products Product[]
 }
