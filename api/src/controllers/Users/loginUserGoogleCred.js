@@ -11,16 +11,26 @@ const loginUserGoogleCred = async (code) => {
     
     // We retrieve user email and check if user is registered
     // If not, prompt the user to register with their gmail
-    const {email} = (await axios.get("https://www.googleapis.com/oauth2/v2/userinfo?access_token=" + tokens.access_token)).data;
+    const {email, name} = (await axios.get("https://www.googleapis.com/oauth2/v2/userinfo?access_token=" + tokens.access_token)).data;
   
-    const user = await prisma.user.findFirst({
+    const user = await prisma.user.upsert({
         where: {
             email
+        },
+        create: {
+            email,
+            name,
+            google: true,
         }
-    })
+
+    });
     
-    if(!user) throw Error("Google account not registered in the database!");
     
+    if(!user) 
+    {
+        throw Error("Google account could not be registered in the database!");
+    }
+
     return user;
 }
 

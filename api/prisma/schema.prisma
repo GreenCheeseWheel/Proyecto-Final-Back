@@ -13,10 +13,11 @@ datasource db {
 model User {
   id Int @id @default(autoincrement())
   email String @unique
-  celular String
+  celular String?
   name String
   address String?
-  password String
+  password String?
+  google Boolean
   rol Role @default(USER)
   active Boolean @default(true)
   sales Sale[]
@@ -30,6 +31,7 @@ model Product {
   category String
   price Decimal
   stock Int
+  rating Int
   active Boolean @default(true)
   categoryrel Category @relation(fields: [category], references: [name])
   details Detail[]
