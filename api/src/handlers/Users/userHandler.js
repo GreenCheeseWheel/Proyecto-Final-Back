@@ -53,6 +53,7 @@ const userLogin = async (req, res) => {
   }
   catch(error)
   {
+    console.log(error.message); 
     res.status(401).json({error: error.message});
   }
 }
@@ -67,7 +68,7 @@ const userGoogleLogin = async (req, res) => {
   }
   catch(error)
   {
-    
+   
     res.status(401).json({error: error.message});
   }
 }
