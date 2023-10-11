@@ -19,23 +19,33 @@ model User {
   password String?
   google Boolean @default(false)
   rol Role @default(USER)
+  rating Rating[]
   active Boolean @default(true)
   sales Sale[]
 }
 
 model Product {
   id Int @id @default(autoincrement())
-  users_id Int[] @default([])
   name String
   image String
   brand String
   category String
   price Decimal
   stock Int
-  rating Float
+  ratings Rating[]
   active Boolean @default(true)
   categoryrel Category @relation(fields: [category], references: [name])
   details Detail[]
+
+}
+
+model Rating {
+  id Int @id
+  rating Float
+  userId Int
+  productId Int
+  product Product @relation(fields: [productId], references: [id])
+  user User @relation(fields: [userId], references: [id])
 }
 
 model Detail {

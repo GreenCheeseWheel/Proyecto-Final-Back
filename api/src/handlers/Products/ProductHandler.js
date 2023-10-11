@@ -44,7 +44,7 @@ const addProductRating = async (req, res) => {
 
   try
   {
-    const product = await addRating(id, userId, rating);
+    const product = await addRating(+id, userId, rating);
 
     res.status(200).json(product);
 
