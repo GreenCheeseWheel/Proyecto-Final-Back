@@ -11,71 +11,85 @@ datasource db {
 }
 
 model User {
-  id Int @id @default(autoincrement())
-  email String @unique
-  celular String?
-  name String
-  address String?
+  id       Int       @id @default(autoincrement())
+  email    String    @unique
+  celular  String?   @default("0000000000")
+  name     String
+  address  String?
   password String?
-  google Boolean @default(false)
-  rol Role @default(USER)
-  rating Rating[]
-  active Boolean @default(true)
-  sales Sale[]
+  google   Boolean
+  rol      Role      @default(USER)
+  active   Boolean   @default(true)
+  ratings Rating[]
+  sales    Sale[]
+  comments Comment[]
 }
 
 model Product {
-  id Int @id @default(autoincrement())
-  name String
-  image String
-  brand String
-  category String
-  price Decimal
-  stock Int
+  id          Int       @id @default(autoincrement())
+  name        String
+  image       String
+  brand       String?
+  category    String
+  description String
+  price       Decimal
+  stock       Int       @default(1)
+  active      Boolean   @default(true)
+  categoryrel Category  @relation(fields: [category], references: [name])
   ratings Rating[]
-  active Boolean @default(true)
-  categoryrel Category @relation(fields: [category], references: [name])
-  details Detail[]
-
-}
-
-model Rating {
-  id Int @id
-  rating Float
-  userId Int
-  productId Int
-  product Product @relation(fields: [productId], references: [id])
-  user User @relation(fields: [userId], references: [id])
+  details     Detail[]
+  comments    Comment[]
 }
 
 model Detail {
-  id Int @id @default(autoincrement())
-  idsale Int
+  id        Int     @id @default(autoincrement())
+  idsale    Int
   idproduct Int
-  quantity Int
-  price Decimal
-  total Decimal
-  sale Sale @relation(fields: [idsale], references: [id])
-  product Product @relation(fields: [idproduct], references: [id])
-
+  image     String?
+  name      String?
+  quantity  Int
+  price     Decimal
+  total     Decimal
+  sale      Sale    @relation(fields: [idsale], references: [id])
+  product   Product @relation(fields: [idproduct], references: [id])
 }
 
 model Category {
-  id Int @id @default(autoincrement())
-  name String @unique
-  active Boolean
+  id       Int       @default(autoincrement())
+  name     String    @id
+  active   Boolean
   products Product[]
 }
 
 model Sale {
-  id Int @id @default(autoincrement())
-  iduser Int
-  details Detail[]
-  user User @relation(fields: [iduser], references: [id])
+  id        Int      @id @default(autoincrement())
+  iduser    Int
+  createdAt DateTime @default(now())
+  details   Detail[]
+  user      User     @relation(fields: [iduser], references: [id])
 }
 
 enum Role {
   USER
   ADMIN
   SUPERADMIN
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  text      String
+  productId Int
+  userId    Int
+  createdAt DateTime @default(now())
+  product   Product  @relation(fields: [productId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model Rating {
+  id Int @id @default(autoincrement())
+  rating Float
+  userId Int
+  productId Int
+  product Product @relation(fields: [productId], references: [id])
+  user User @relation(fields: [userId], references: [id])
 }

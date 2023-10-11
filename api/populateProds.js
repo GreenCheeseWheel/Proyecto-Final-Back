@@ -209,7 +209,7 @@ async function populate()
 {
     for(const prod of arrayProds)
     {
-        await axios.post("https://pf-back-deploy.onrender.com/product", prod);
+        await axios.post("http://localhost:3001/product", prod);
     }
 }
 

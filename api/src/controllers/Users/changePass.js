@@ -1,4 +1,5 @@
 const prisma = require("../../db");
+const bcrypt = require("bcrypt");
 
 const changePass = async (id, password) => {
     const user = await prisma.user.findFirst({
@@ -9,7 +10,7 @@ const changePass = async (id, password) => {
 
     if(!user) throw Error("Invalid user");
 
-    if(user.password == password) throw Error("Password must be different");
+    if(bcrypt.compareSync(password, user.password)) throw Error("Password must be different");
     
     const updatedUser = await prisma.user.update(
         {
@@ -17,7 +18,7 @@ const changePass = async (id, password) => {
                 id,
             },
             data: {
-                password
+                password: await bcrypt.hash(password, 10)
             }
         }
     );

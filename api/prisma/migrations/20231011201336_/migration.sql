@@ -1,0 +1,6 @@
+-- AlterTable
+ALTER TABLE "Detail" ADD COLUMN     "image" TEXT,
+ADD COLUMN     "name" TEXT;
+
+-- AlterTable
+ALTER TABLE "Sale" ADD COLUMN     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP;

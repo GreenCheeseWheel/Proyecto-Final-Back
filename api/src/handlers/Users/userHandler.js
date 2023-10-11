@@ -1,12 +1,17 @@
 require("dotenv").config();
 const { JWT_SECRET } = process.env;
 
+const sendLoginNotif = require("../../controllers/Mails/sendLoginNotif");
+const sendWelcome = require("../../controllers/Mails/sendWelcome");
 
 const newUser = require("../../controllers/Users/createuser");
 const deleteUser = require("../../controllers/Users/deleteUser");
 const editUser = require("../../controllers/Users/editUser");
 const loginUser = require("../../controllers/Users/loginUser");
 const loginUserGoogle = require("../../controllers/Users/loginUserGoogle");
+const changePass = require("../../controllers/Users/changePass");
+
+
 const {
   getUsers,
   getUserById,
@@ -15,8 +20,6 @@ const {
 
 const jwt = require("jsonwebtoken");
 const loginUserGoogleCred = require("../../controllers/Users/loginUserGoogleCred");
-const changePass = require("../../controllers/Users/changePass");
-
 
 //Generar el TOKEN
 function generateToken(user) {
@@ -28,16 +31,81 @@ function generateToken(user) {
 
 //Creacion del usuario
 const usersCreate = async (req, res) => {
-  const { name, email, celular, password } = req.body;
+  const { name, email, celular, password, address, rol } = req.body;
   try {
-    const user = await newUser(name, email, celular, password);
+    const user = await newUser(name, email, celular, password, address, rol);
 
     // Generar un token JWT para el usuario
     const token = generateToken(user);
 
-    res.status(201).json({id: user.id, email: user.email, name: user.name, rol: user.rol, celular: user.celular,  token });
+    await sendWelcome(email, "./src/templates/Bienvenido.html");
+
+    res.status(201).json({
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      rol: user.rol,
+      celular: user.celular,
+      address: user.address,
+      token,
+    });
   } catch (error) {
     res.status(400).json({ error: error.message });
+  }
+};
+
+//Login del usuario (Sin terceros)
+const userLogin = async (req, res) => {
+  try {
+    const { email, password } = req.body;
+
+    const user = await loginUser(email, password);
+    const token = generateToken(user);
+
+    res.status(200).json({
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      rol: user.rol,
+      celular: user.celular,
+      address: user.address,
+      token,
+    });
+  } catch (error) {
+    res.status(401).json({ error: error.message });
+  }
+};
+
+//Login del usuario(Google)
+const userGoogleLogin = async (req, res) => {
+  try {
+    const auth_url = await loginUserGoogle();
+
+    res.status(200).json({ auth_url });
+  } catch (error) {
+    res.status(401).json({ error: error.message });
+  }
+};
+
+const userGoogleLoginCredentials = async (req, res) => {
+  const { google_code } = req.body;
+  console.log(google_code);
+  try {
+    const user = await loginUserGoogleCred(google_code);
+    const token = generateToken(user);
+
+    res.status(200).json({
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      rol: user.rol,
+      celular: user.celular,
+      address: user.address,
+      token,
+    });
+  } catch (error) {
+    console.log(error, "Error");
+    res.status(401).json({ error: error.message });
   }
 };
 
@@ -48,7 +116,7 @@ const changePassword = async (req, res) => {
 
   try
   {
-    const user = await changePass(password);
+    const user = await changePass(id, password);
     res.status(200).json({id: user.id, email: user.email, name: user.name, rol: user.rol, celular: user.celular});
   }
   catch(error)
@@ -57,64 +125,19 @@ const changePassword = async (req, res) => {
   }
 }
 
-//Login del usuario (Sin terceros)
-const userLogin = async (req, res) => {
-  try
-  {
-    const {email, password} = req.body;
-
-    const user = await loginUser(email, password);
-    const token = generateToken(user);
-
-    res.status(200).json({id: user.id, email: user.email, name: user.name, rol: user.rol, celular: user.celular, token });
-  }
-  catch(error)
-  {
-    console.log(error.message); 
-    res.status(401).json({error: error.message});
-  }
-}
-
-//Login del usuario(Google)
-const userGoogleLogin = async (req, res) => {
-  try
-  {
-    const auth_url = await loginUserGoogle();
-    
-    res.status(200).json({auth_url});
-  }
-  catch(error)
-  {
-   
-    res.status(401).json({error: error.message});
-  }
-}
-
-const userGoogleLoginCredentials = async (req, res) => {
-  const { google_code } = req.body;
-  
-  try
-  {
-    const user = await loginUserGoogleCred(google_code)
-    const token = generateToken(user);
-    res.status(200).json({id: user.id, email: user.email, name: user.name, rol: user.rol, celular: user.celular, token });
-  }
-  catch(error) 
-  {
-    console.error("ERROR AUTHENTICATING WITH GOOGLE || " + error.message)
-    res.status(401).json({error: error.message});
-  }
-  
-
-}
-
 
 //Borrar el usuario
 const userDelete = async (req, res) => {
   const { id } = req.params;
   try {
     const user = await deleteUser(+id);
-    res.status(201).json({id: user.id, email: user.email, name: user.name, rol: user.rol, celular: user.celular});
+    res.status(201).json({
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      rol: user.rol,
+      celular: user.celular,
+    });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -123,10 +146,28 @@ const userDelete = async (req, res) => {
 //Editar el usuario
 const usersEdit = async (req, res) => {
   const { id } = req.params;
-  const { name, email, celular, password } = req.body;
+  const { name, email, rol, celular, password, address, active } = req.body;
+  console.log(req.body);
   try {
-    const user = await editUser(+id, name, email, celular, password);
-    res.status(201).json({id: user.id, email: user.email, name: user.name, rol: user.rol, celular: user.celular});
+    const user = await editUser(
+      +id,
+      name,
+      email,
+      rol,
+      celular,
+      password,
+      address,
+      active
+    );
+    res.status(201).json({
+      id: user.id,
+      email: user.email,
+      name: user.name,
+      rol: user.rol,
+      celular: user.celular,
+      address: user.address,
+      active: user.active,
+    });
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
@@ -165,14 +206,14 @@ const userGetById = async (req, res) => {
   }
 };
 
-module.exports = { 
-  usersCreate, 
-  userLogin, 
-  userGoogleLogin, 
-  userGoogleLoginCredentials,
-  userDelete, 
-  usersEdit, 
-  usersGet, 
+module.exports = {
+  usersCreate,
+  userLogin,
+  userGoogleLogin,
+  userDelete,
+  usersEdit,
+  usersGet,
   userGetById,
+  userGoogleLoginCredentials,
   changePassword
 };

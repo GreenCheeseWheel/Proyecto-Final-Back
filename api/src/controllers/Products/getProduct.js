@@ -1,10 +1,24 @@
 const prisma = require("../../db");
-
 //Busca todos los productos.
 
-const getProduct = async (brand) => {
-  let product = await prisma.product.findMany();
- 
+const getProduct = async (brand, maxPrice, categoryName, sort) => {
+  let product = await prisma.product.findMany({
+    where: {
+      brand,
+      price: {
+        lte: isNaN(maxPrice) ? undefined : maxPrice,
+      },
+      category: {
+        contains: categoryName,
+      },
+    },
+    orderBy: [{ price: sort }],
+    include: {
+      comments: true,
+      ratings: true,
+    }
+  });
+
   return product.length === 0
     ? "No hay ninguna coincidencia en la base de datos"
     : product;
@@ -12,37 +26,41 @@ const getProduct = async (brand) => {
 
 //Busca un producto por su N° de Id:
 
-const getProductById = async (id, brand) => {
+const getProductById = async (id) => {
   let product = await prisma.product.findUnique({
     where: {
       id,
     },
+    include: {
+      comments: true,
+      ratings: true,
+    }
   });
-
-  product = filterByBrand(brand);
 
   return product;
 };
 
 //Busca un producto por su nombre:
 
-const getProductByName = async (name, brand) => {
-  let product = await prisma.product.findMany({
+const getProductByName = async (name, brand, maxPrice, categoryName, sort) => {
+  let product = prisma.product.findMany({
     where: {
       name: {
         contains: name,
       },
+      brand,
+      price: {
+        lte: isNaN(maxPrice) ? undefined : maxPrice,
+      },
+      category: {
+        contains: categoryName,
+      },
     },
-  });
 
-  
-  product = filterByBrand(brand);
+    orderBy: [{ price: sort }],
+  });
 
   return product;
 };
 
 module.exports = { getProduct, getProductById, getProductByName };
-
-// findMany() --> se utiliza para buscar y recuperar varios registros que cumplen con ciertos criterios de consulta de una tabla en la base de datos.
-
-// findUnique() --> se utiliza para buscar y recuperar un único registro de una tabla en la base de datos. A diferencia de findMany(), que recupera múltiples registros

@@ -14,9 +14,6 @@ app.use(express.json());
 // Auth is disabled for now to test the app easily
 // app.use(authenticate);
 // app.use(authorizate);
-app.use(routes);
-
-
-
+app.use("", routes);
 
 module.exports = app;

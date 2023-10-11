@@ -2,9 +2,17 @@ const prisma = require("../../db");
 
 const addRating = async (id, userId, newRating) => {
     
-    // SI EL PRODUCTO O EL USUARIO NO EXISTEN LANZA ERROR
+    const ratingObj = await prisma.rating.findFirst({
+        where: {
+            productId: id,
+            userId,
+        },
+    });
+
+
     await prisma.rating.upsert({
         where: {
+            id: ratingObj ? ratingObj.id : -1,
             productId: id,
             userId,
         },
@@ -24,7 +32,7 @@ const addRating = async (id, userId, newRating) => {
             id,
         },
         include: {
-            ratings
+            ratings: true,
         }
     });
 
