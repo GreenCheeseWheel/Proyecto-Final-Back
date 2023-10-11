@@ -15,6 +15,7 @@ const {
 
 const jwt = require("jsonwebtoken");
 const loginUserGoogleCred = require("../../controllers/Users/loginUserGoogleCred");
+const changePass = require("../../controllers/Users/changePass");
 
 
 //Generar el TOKEN
@@ -39,6 +40,22 @@ const usersCreate = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
+
+// Cambiar password del usuario
+const changePassword = async (req, res) => {
+  const {id, password} = req.body;
+
+  try
+  {
+    const user = await changePass(password);
+    res.status(200).json({id: user.id, email: user.email, name: user.name, rol: user.rol, celular: user.celular});
+  }
+  catch(error)
+  {
+    res.status(500).json({error: error.message});
+  }
+}
 
 //Login del usuario (Sin terceros)
 const userLogin = async (req, res) => {
@@ -84,6 +101,7 @@ const userGoogleLoginCredentials = async (req, res) => {
   }
   catch(error) 
   {
+    console.error("ERROR AUTHENTICATING WITH GOOGLE || " + error.message)
     res.status(401).json({error: error.message});
   }
   
@@ -154,5 +172,6 @@ module.exports = {
   userDelete, 
   usersEdit, 
   usersGet, 
-  userGetById 
+  userGetById,
+  changePassword
 };

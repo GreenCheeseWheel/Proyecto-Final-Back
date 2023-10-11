@@ -17,7 +17,7 @@ model User {
   name String
   address String?
   password String?
-  google Boolean
+  google Boolean @default(false)
   rol Role @default(USER)
   active Boolean @default(true)
   sales Sale[]

@@ -24,7 +24,7 @@ const loginUserGoogleCred = async (code) => {
         create: {
             email,
             name,
-            google: true,
+            google: true
         }
     });
     
