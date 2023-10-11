@@ -21,6 +21,7 @@ const {
   editAProduct,
   getAProduct,
   getProductId,
+  addProductRating
 } = require("../handlers/Products/ProductHandler");
 
 const router = Router();
@@ -52,6 +53,7 @@ router.delete("/product/:id", deleteAProduct);
 router.put("/product/:id", editAProduct);
 router.get("/product", getAProduct);
 router.get("/product/:id", getProductId);
+router.post("/rate/:id", addProductRating)
 /////////////////////////////////////////
 
 module.exports = router;

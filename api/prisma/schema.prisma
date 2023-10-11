@@ -20,18 +20,24 @@ model User {
   google Boolean @default(false)
   rol Role @default(USER)
   active Boolean @default(true)
+  
+  rated_prods Product[]
   sales Sale[]
 }
 
 model Product {
   id Int @id @default(autoincrement())
+  users_id Int[]
   name String
   image String
   brand String
   category String
   price Decimal
   stock Int
-  rating Int
+  
+  rating Float
+  users_rated User[]
+
   active Boolean @default(true)
   categoryrel Category @relation(fields: [category], references: [name])
   details Detail[]

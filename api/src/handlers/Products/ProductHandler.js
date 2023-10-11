@@ -7,6 +7,8 @@ const {
   getProductById,
   getProductByName,
 } = require("../../controllers/Products/getProduct");
+const addRating = require("../../controllers/Products/addRating");
+const { user } = require("../../db");
 
 
 //Creacion de un nuevo producto:
@@ -34,6 +36,25 @@ const deleteAProduct = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
+
+const addProductRating = async (req, res) => {
+  const {id} = req.params;
+  const {userId, rating} = req.body;
+
+  try
+  {
+    const product = await addRating(id, userId, rating);
+
+    res.status(200).json(product);
+
+  }
+  catch(error)
+  {
+    res.status(500).json({error: error.message});
+  }
+
+}
 
 //Editar un producto:
 
@@ -102,4 +123,5 @@ module.exports = {
   editAProduct,
   getAProduct,
   getProductId,
+  addProductRating
 };

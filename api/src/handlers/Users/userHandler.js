@@ -108,6 +108,7 @@ const userGoogleLoginCredentials = async (req, res) => {
 
 }
 
+
 //Borrar el usuario
 const userDelete = async (req, res) => {
   const { id } = req.params;
