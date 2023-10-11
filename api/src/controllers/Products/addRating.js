@@ -13,6 +13,7 @@ const addRating = async (id, userId, rating) => {
     
     if(product.users_id.includes(userId))
     {
+        throw Error("Invalid operation")
         /* LOGICA PARA ACTUALIZAR EL RATING SEGUN SI EL USUARIO YA DIO PUNTUACION O NO*/
     }
     
