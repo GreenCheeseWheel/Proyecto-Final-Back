@@ -8,7 +8,6 @@ const {
   getProductByName,
 } = require("../../controllers/Products/getProduct");
 const addRating = require("../../controllers/Products/addRating");
-const { user } = require("../../db");
 
 
 //Creacion de un nuevo producto:
