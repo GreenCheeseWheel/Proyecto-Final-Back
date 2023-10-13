@@ -3,7 +3,11 @@ const prisma = require("../../db");
 async function getAllSales() {
   const sales = await prisma.sale.findMany({
     include: {
-      details: true,
+      details: {
+        include: {
+          products: true
+        }
+      },
     },
   });
 
