@@ -44,14 +44,9 @@ model Product {
 model Detail {
   id        Int     @id @default(autoincrement())
   idsale    Int
-  idproduct Int
-  image     String?
-  name      String?
-  quantity  Int
-  price     Decimal
   total     Decimal
   sale      Sale    @relation(fields: [idsale], references: [id])
-  product   Product @relation(fields: [idproduct], references: [id])
+  products   Product[] 
 }
 
 model Category {

@@ -1,45 +1,61 @@
 const prisma = require("../../db");
 
-async function createSale(iduser, idproduct, quantity) {
-  const product = await prisma.product.findFirst({
+// products es un array de productos
+async function createSale(iduser, productArr) {
+  const idArr =  productArr.map(prod => {return {id: prod.id}});
+ 
+  const quantityArr = productArr.map(prod => prod.quantity);
+
+  const products = await prisma.product.findMany({
     where: {
-      id: idproduct,
-    },
+      OR: idArr
+    }
   });
 
-  if (!product) throw Error("No such product in the database");
+ 
 
-  // if (product.stock - quantity < 0)
-  //   throw Error("Bought quantity greater than stock");
+  if (!products || !products.length) {
+    throw Error("Inexistent products provided");
+  }    
+
+  let total = 0;
+
+  for(let i = 0; i < quantityArr.length; i++)
+  {
+    total += quantityArr[i] * products[i].price;
+  }
+
+  console.log("EL TOTAL: " + total);
 
   const detail = await prisma.detail.create({
     data: {
-      image: product.image,
-      name: product.name,
-      quantity: quantity,
-      price: product.price,
-      total: product.price * quantity,
+      total: total,
       sale: {
         create: {
           iduser: iduser,
         },
       },
-      product: {
-        connect: {
-          id: product.id,
-        },
+      products: {
+        connect: products,
       },
     },
+    include: {
+      products: true,
+    }
   });
 
-  await prisma.product.update({
-    where: {
-      id: product.id,
-    },
-    data: {
-      stock: product.stock - quantity,
-    },
-  });
+
+  for(let i = 0; i < products.length; i++)
+  {
+    prisma.product.update({
+      where: {
+        id: products[i].id
+      },
+      data: {
+        stock: products[i].stock -quantityArr[i] 
+      },
+    })
+  }
 
   return detail;
 }

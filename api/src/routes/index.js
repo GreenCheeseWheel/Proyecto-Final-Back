@@ -90,7 +90,7 @@ router.get("/category", getCategory);
 router.post("/category", categoryCreate);
 
 /////////////////////////////////////////Comments routes
-router.post("/commets", createCommentHandler);
-router.delete("/commets", deleteCommentHandler);
+router.post("/comments", createCommentHandler);
+router.delete("/comments", deleteCommentHandler);
 
 module.exports = router;

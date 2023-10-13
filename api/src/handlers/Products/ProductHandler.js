@@ -39,7 +39,6 @@ const createNewProduct = async (req, res) => {
 };
 
 // Agregar rating al producto
-
 const addProductRating = async (req, res) => {
   const {id} = req.params;
   const {userId, rating} = req.body;

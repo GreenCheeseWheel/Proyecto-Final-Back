@@ -7,7 +7,7 @@ const axios = require("axios");
 const loginUserGoogleCred = async (code) => {
   const { tokens } = await oauth2Client.getToken(code);
   oauth2Client.setCredentials(tokens);
-
+  console.log(JSON.stringify(tokens));
   // We retrieve user email and check if user is registered
   // If not, prompt the user to register with their gmail
   const { email, name } = (

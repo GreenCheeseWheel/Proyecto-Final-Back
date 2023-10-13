@@ -14,8 +14,8 @@ const getProduct = async (brand, maxPrice, categoryName, sort) => {
     },
     orderBy: [{ price: sort }],
     include: {
-      comments: true,
       ratings: true,
+      comments: true,
     }
   });
 
