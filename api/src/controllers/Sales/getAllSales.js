@@ -7,6 +7,10 @@ async function getAllSales() {
       user: {
         select: {
           password: false,
+          email:true,
+          name:true,
+          address:true,
+          rol:true
         }
       }
     },
