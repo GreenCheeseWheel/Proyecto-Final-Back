@@ -21,7 +21,9 @@ async function createSale(iduser, productArr) {
 
  
 
-
+  // EL MODELO DE DETAIL AHORA TIENE UN ARRAY
+  // DE OBJETOS ( JSON[] ) LLAMADO products
+  // ASÍ QUE SE ELIMINA LA RELACIÓN ENTRE DETAIL Y PRODUCT
   const detail = await prisma.detail.create({
     data: {
       total: total,
@@ -31,7 +33,7 @@ async function createSale(iduser, productArr) {
         },
       },
       products: products.map((prod, index) => {
-        // ESTE QUILOMBO DE ACÁ ES PARA NO DEVOLVER ES STOCK
+        // ESTE QUILOMBO DE ACÁ ES PARA NO DEVOLVER EL STOCK
         // PORQUE SEGURO ROMPEN LAS BOLAS CON ESO
         return {
           id: prod.id,
