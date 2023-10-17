@@ -37,7 +37,6 @@ model Product {
   active      Boolean   @default(true)
   categoryrel Category  @relation(fields: [category], references: [name])
   ratings Rating[]
-  details     Detail[]
   comments    Comment[]
 }
 
@@ -46,15 +45,9 @@ model Detail {
   idsale    Int
   total     Decimal
   sale      Sale    @relation(fields: [idsale], references: [id])
-  products   Product[] 
+  products  Json[] 
 }
 
-model Category {
-  id       Int       @default(autoincrement())
-  name     String    @id
-  active   Boolean
-  products Product[]
-}
 
 model Sale {
   id        Int      @id @default(autoincrement())
@@ -62,6 +55,13 @@ model Sale {
   createdAt DateTime @default(now())
   details   Detail[]
   user      User     @relation(fields: [iduser], references: [id])
+}
+
+model Category {
+  id       Int       @default(autoincrement())
+  name     String    @id
+  active   Boolean
+  products Product[]
 }
 
 enum Role {
