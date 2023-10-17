@@ -31,6 +31,8 @@ async function createSale(iduser, productArr) {
         },
       },
       products: products.map((prod, index) => {
+        // ESTE QUILOMBO DE ACÁ ES PARA NO DEVOLVER ES STOCK
+        // PORQUE SEGURO ROMPEN LAS BOLAS CON ESO
         return {
           id: prod.id,
           name: prod.name, 
