@@ -20,7 +20,7 @@ model User {
   google   Boolean
   rol      Role      @default(USER)
   active   Boolean   @default(true)
-  ratings Rating[]
+  ratings  Rating[]
   sales    Sale[]
   comments Comment[]
 }
@@ -36,7 +36,7 @@ model Product {
   stock       Int       @default(1)
   active      Boolean   @default(true)
   categoryrel Category  @relation(fields: [category], references: [name])
-  ratings Rating[]
+  ratings     Rating[]
   comments    Comment[]
 }
 

@@ -1,7 +1,7 @@
 const createTransporter = require("./utils/createTransporter");
 require("dotenv").config();
 
-const sendPaymentFailure = async (HTMLpath) => {
+const sendPaymentFailure = async (userMail, HTMLpath) => {
   const transporter = await createTransporter();
 
   const options = {

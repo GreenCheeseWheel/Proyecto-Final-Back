@@ -12,6 +12,15 @@ async function createSale(iduser, productArr) {
     }
   );
 
+  const user = await prisma.user.findFirst(
+    {
+      where: {
+        id: iduser,
+      }
+    }
+  );
+
+
   let total = 0;
 
   for(let i = 0; i < products.length; i++)
@@ -63,6 +72,9 @@ async function createSale(iduser, productArr) {
       },
     })
   }
+
+
+  sendPaymentSuccess(user.email);
 
   return detail;
 }
