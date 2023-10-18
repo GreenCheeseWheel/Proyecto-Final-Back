@@ -1,4 +1,5 @@
 const prisma = require("../../db");
+const sendPaymentSuccess = require("../Mails/sendPaymentSuccess");
 
 // products es un array de productos
 async function createSale(iduser, productArr) {

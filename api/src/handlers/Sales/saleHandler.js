@@ -2,7 +2,6 @@ const prisma = require("../../db");
 const createSaleController = require("../../controllers/Sales/createSale");
 const getAllSalesController = require("../../controllers/Sales/getAllSales");
 const getSaleByIdController = require("../../controllers/Sales/getSaleById");
-const sendPaymentSuccess = require("../../controllers/Mails/sendPaymentSuccess");
 
 const createSale = (req, res) => {
   const { iduser, products } = req.body;
